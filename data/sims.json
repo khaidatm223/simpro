@@ -1,0 +1,212 @@
+[
+  {
+    "so": "0988 111 222",
+    "gia": 3500000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Lặp kép",
+    "tags": ["Dễ nhớ"]
+  },
+  {
+    "so": "0977 333 444",
+    "gia": 7200000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Tứ quý",
+    "tags": ["VIP", "Phong thủy"]
+  },
+  {
+    "so": "0912 888 999",
+    "gia": 6500000,
+    "nhaMang": "Vinaphone",
+    "loaiSim": "Tam hoa",
+    "tags": ["Đẹp"]
+  },
+  {
+    "so": "0909 456 456",
+    "gia": 4800000,
+    "nhaMang": "Mobifone",
+    "loaiSim": "Lặp kép",
+    "tags": ["Dễ gọi"]
+  },
+  {
+    "so": "0966 123 123",
+    "gia": 5100000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Lặp kép",
+    "tags": ["Phong thủy tốt"]
+  },
+  {
+    "so": "0933 555 888",
+    "gia": 8000000,
+    "nhaMang": "Mobifone",
+    "loaiSim": "Tam hoa",
+    "tags": ["VIP"]
+  },
+  {
+    "so": "0922 777 666",
+    "gia": 4200000,
+    "nhaMang": "Vietnamobile",
+    "loaiSim": "Lặp kép",
+    "tags": ["Giá rẻ"]
+  },
+  {
+    "so": "0898 999 000",
+    "gia": 5600000,
+    "nhaMang": "Vinaphone",
+    "loaiSim": "Tứ quý",
+    "tags": ["Dễ nhớ"]
+  },
+  {
+    "so": "0868 686 868",
+    "gia": 9700000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Lặp kép",
+    "tags": ["VIP"]
+  },
+  {
+    "so": "0944 222 111",
+    "gia": 3900000,
+    "nhaMang": "Vinaphone",
+    "loaiSim": "Lặp kép",
+    "tags": ["Dễ gọi"]
+  },
+  {
+    "so": "0975 888 333",
+    "gia": 7400000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Tam hoa",
+    "tags": ["Đẹp", "Phong thủy"]
+  },
+  {
+    "so": "0902 123 456",
+    "gia": 2800000,
+    "nhaMang": "Mobifone",
+    "loaiSim": "Dễ nhớ",
+    "tags": ["Giá tốt"]
+  },
+  {
+    "so": "0939 999 777",
+    "gia": 8200000,
+    "nhaMang": "Mobifone",
+    "loaiSim": "Tứ quý",
+    "tags": ["VIP"]
+  },
+  {
+    "so": "0917 555 444",
+    "gia": 4600000,
+    "nhaMang": "Vinaphone",
+    "loaiSim": "Lặp kép",
+    "tags": ["Dễ gọi"]
+  },
+  {
+    "so": "0968 888 111",
+    "gia": 9100000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Tam hoa",
+    "tags": ["Phong thủy"]
+  },
+  {
+    "so": "0926 222 333",
+    "gia": 3200000,
+    "nhaMang": "Vietnamobile",
+    "loaiSim": "Lặp kép",
+    "tags": ["Giá rẻ"]
+  },
+  {
+    "so": "0896 123 789",
+    "gia": 2500000,
+    "nhaMang": "Vinaphone",
+    "loaiSim": "Dễ nhớ",
+    "tags": ["Đẹp"]
+  },
+  {
+    "so": "0908 666 888",
+    "gia": 7700000,
+    "nhaMang": "Mobifone",
+    "loaiSim": "Tam hoa",
+    "tags": ["VIP"]
+  },
+  {
+    "so": "0948 111 999",
+    "gia": 6800000,
+    "nhaMang": "Vinaphone",
+    "loaiSim": "Tứ quý",
+    "tags": ["Phong thủy"]
+  },
+  {
+    "so": "0979 333 222",
+    "gia": 4100000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Lặp kép",
+    "tags": ["Dễ nhớ"]
+  },
+  {
+    "so": "0915 456 789",
+    "gia": 3000000,
+    "nhaMang": "Vinaphone",
+    "loaiSim": "Dễ nhớ",
+    "tags": ["Giá tốt"]
+  },
+  {
+    "so": "0982 777 555",
+    "gia": 6400000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Tam hoa",
+    "tags": ["Đẹp"]
+  },
+  {
+    "so": "0935 222 888",
+    "gia": 5300000,
+    "nhaMang": "Mobifone",
+    "loaiSim": "Lặp kép",
+    "tags": ["Dễ gọi"]
+  },
+  {
+    "so": "0963 999 444",
+    "gia": 7200000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Tứ quý",
+    "tags": ["VIP"]
+  },
+  {
+    "so": "0928 123 456",
+    "gia": 2200000,
+    "nhaMang": "Vietnamobile",
+    "loaiSim": "Dễ nhớ",
+    "tags": ["Giá rẻ"]
+  },
+  {
+    "so": "0897 888 222",
+    "gia": 5900000,
+    "nhaMang": "Vinaphone",
+    "loaiSim": "Tam hoa",
+    "tags": ["Đẹp"]
+  },
+  {
+    "so": "0942 666 111",
+    "gia": 4800000,
+    "nhaMang": "Vinaphone",
+    "loaiSim": "Lặp kép",
+    "tags": ["Phong thủy"]
+  },
+  {
+    "so": "0971 555 999",
+    "gia": 7100000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Tứ quý",
+    "tags": ["VIP"]
+  },
+  {
+    "so": "0906 444 888",
+    "gia": 6700000,
+    "nhaMang": "Mobifone",
+    "loaiSim": "Tam hoa",
+    "tags": ["Đẹp"]
+  },
+  {
+    "so": "0937 123 123",
+    "gia": 3100000,
+    "nhaMang": "Mobifone",
+    "loaiSim": "Lặp kép",
+    "tags": ["Dễ nhớ"]
+  }
+]

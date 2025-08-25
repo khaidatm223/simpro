@@ -1,0 +1,37 @@
+[
+  {
+    "id": "1",
+    "number": "0987654321",
+    "price": 1500000,
+    "carrier": "Viettel",
+    "meaning": "Thần tài nhỏ"
+  },
+  {
+    "id": "2",
+    "number": "0912345678",
+    "price": 5000000,
+    "carrier": "Vinaphone",
+    "meaning": "Lộc phát"
+  },
+  {
+    "so": "0982333179",
+    "gia": 1200000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Trả trước",
+    "id": "1756057970546"
+  },
+  {
+    "so": "0986666178",
+    "gia": 1500000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Trả trước",
+    "id": "1756059480442"
+  },
+  {
+    "so": "0982.52.56.58",
+    "gia": 5000000,
+    "nhaMang": "Viettel",
+    "loaiSim": "Trả trước",
+    "id": "1756065108219"
+  }
+]
