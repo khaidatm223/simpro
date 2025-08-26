@@ -212,7 +212,7 @@ export default function Home() {
         {currentSims.map((sim) => (
           <Card
             key={sim.id}
-            className="relative shadow-md hover:shadow-lg hover:border-blue-400 transition rounded-2xl p-4 bg-gray-50 border border-gray-200"
+            className="relative shadow-md hover:shadow-lg hover:border-blue-400 transition rounded-2xl p-4 bg-gray-70 border border-gray-300"
           >
             <div className="text-center mb-4">
               <h2 className="text-3xl md:text-4xl font-extrabold text-red-600 tracking-wider">

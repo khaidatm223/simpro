@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <header className="bg-white shadow sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <h1 className="font-bold text-lg">SimPro • Tìm Sim Số Đẹp</h1>
-            <span className="text-sm text-gray-500">Demo Web-App</span>
+            <span className="text-sm font-bold text-lg text-gray-600">LH: 098.6666.178</span>
           </div>
         </header>
 
@@ -24,8 +24,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
         <footer className="border-t mt-8 bg-white/70">
           <div className="max-w-6xl mx-auto px-4 py-4 text-sm text-gray-600 flex justify-between">
-            <span>© {new Date().getFullYear()} SimPro. Demo chỉ tư vấn.</span>
-            <span>Hỗ trợ: 09xx.xxx.xxx</span>
+            <span>© {new Date().getFullYear()} SimPro. </span>
+            <span>Hỗ trợ: 098.6666.178</span>
           </div>
         </footer>
       </body>
