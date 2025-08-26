@@ -158,7 +158,7 @@ export default function Home() {
                 <div className="flex flex-col gap-2 text-left text-gray-800">
                   <p className="font-semibold">📶 {sim.nhaMang}</p>
                   <p className="font-medium">🔮 {sim.loaiSim}</p>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm font-extrabold text-gray-600">
                     💰 Giá: {Number(sim.gia || 0).toLocaleString()} đ
                   </p>
                 </div>
@@ -212,7 +212,7 @@ export default function Home() {
         {currentSims.map((sim) => (
           <Card
             key={sim.id}
-            className="relative shadow-md hover:shadow-xl transition rounded-2xl p-4 bg-white"
+            className="relative shadow-md hover:shadow-lg hover:border-blue-400 transition rounded-2xl p-4 bg-gray-50 border border-gray-200"
           >
             <div className="text-center mb-4">
               <h2 className="text-3xl md:text-4xl font-extrabold text-red-600 tracking-wider">
@@ -223,7 +223,7 @@ export default function Home() {
             <div className="flex flex-col gap-2 text-left text-gray-700">
               <p className="font-semibold">📶 {sim.nhaMang}</p>
               <p className="font-medium">🔮 {sim.loaiSim}</p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm font-extrabold text-gray-600">
                 💰 Giá: {Number(sim.gia || 0).toLocaleString()} đ
               </p>
             </div>
