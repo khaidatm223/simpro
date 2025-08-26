@@ -32,9 +32,13 @@ export default function Home() {
   const [loaiSim, setLoaiSim] = useState("");
   const [selectedSim, setSelectedSim] = useState<Sim | null>(null);
 
-  // Phân trang
+  // Pagination normal sims
   const [currentPage, setCurrentPage] = useState(1);
   const simsPerPage = 30;
+
+  // Pagination high-end sims
+  const [currentHighEndPage, setCurrentHighEndPage] = useState(1);
+  const highEndPerPage = 6; // 2 hàng x 3 cột
 
   useEffect(() => {
     fetch("/api/sims")
@@ -60,11 +64,18 @@ export default function Home() {
   const highEndSims = filtered.filter(
     (sim) => removeVietnameseTones(sim.loaiSim || "") === "thuong luu"
   );
-
   const normalSims = filtered.filter(
     (sim) => removeVietnameseTones(sim.loaiSim || "") !== "thuong luu"
   );
 
+  // Lấy trang hiện tại cho High-End
+  const totalHighEndPages = Math.ceil(highEndSims.length / highEndPerPage);
+  const currentHighEndSims = highEndSims.slice(
+    (currentHighEndPage - 1) * highEndPerPage,
+    currentHighEndPage * highEndPerPage
+  );
+
+  // Lấy trang hiện tại cho Normal Sims
   const totalPages = Math.ceil(normalSims.length / simsPerPage);
   const currentSims = normalSims.slice(
     (currentPage - 1) * simsPerPage,
@@ -133,7 +144,7 @@ export default function Home() {
             🌟 Sim Thượng Lưu
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {highEndSims.map((sim) => (
+            {currentHighEndSims.map((sim) => (
               <Card
                 key={sim.id}
                 className="relative shadow-lg hover:shadow-2xl transition rounded-2xl p-4 bg-gradient-to-br from-yellow-100 to-yellow-50 border border-yellow-300"
@@ -155,7 +166,7 @@ export default function Home() {
                 <div className="absolute bottom-4 right-4">
                   <Button
                     size="sm"
-                    className="rounded-full px-4 py-2 shadow-md"
+                    className="rounded-full px-4 py-2 shadow-md bg-blue-500 text-white hover:bg-blue-600"
                     onClick={() => setSelectedSim(sim)}
                   >
                     Giữ số
@@ -163,6 +174,34 @@ export default function Home() {
                 </div>
               </Card>
             ))}
+          </div>
+
+          {/* Pagination High-End */}
+          <div className="flex justify-center mt-4 gap-2">
+            <Button
+              size="sm"
+              disabled={currentHighEndPage === 1}
+              onClick={() => setCurrentHighEndPage((p) => p - 1)}
+            >
+              Prev
+            </Button>
+            {Array.from({ length: totalHighEndPages }, (_, i) => (
+              <Button
+                key={i}
+                size="sm"
+                variant={currentHighEndPage === i + 1 ? "default" : "outline"}
+                onClick={() => setCurrentHighEndPage(i + 1)}
+              >
+                {i + 1}
+              </Button>
+            ))}
+            <Button
+              size="sm"
+              disabled={currentHighEndPage === totalHighEndPages}
+              onClick={() => setCurrentHighEndPage((p) => p + 1)}
+            >
+              Next
+            </Button>
           </div>
         </div>
       )}
@@ -192,7 +231,7 @@ export default function Home() {
             <div className="absolute bottom-4 right-4">
               <Button
                 size="sm"
-                className="rounded-full px-4 py-2 shadow-md"
+                className="rounded-full px-4 py-2 shadow-md bg-blue-500 text-white hover:bg-blue-600"
                 onClick={() => setSelectedSim(sim)}
               >
                 Giữ số
@@ -202,7 +241,7 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Pagination */}
+      {/* Pagination Normal Sims */}
       <div className="flex justify-center mt-6 gap-2">
         <Button
           size="sm"
@@ -241,7 +280,9 @@ export default function Home() {
               <Input placeholder="Họ và tên" className="mb-2" />
               <Input placeholder="Số điện thoại" className="mb-2" />
               <Input placeholder="Zalo (tuỳ chọn)" className="mb-2" />
-              <Button className="w-full">Xác nhận giữ số</Button>
+              <Button className="w-full bg-blue-500 text-white hover:bg-blue-600">
+                Xác nhận giữ số
+              </Button>
               <Button
                 variant="outline"
                 className="w-full mt-2"
