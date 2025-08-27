@@ -1,34 +1,49 @@
 import { NextRequest, NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+import { connectToDB } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 
-export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const { id } = await context.params; // <- phải await
-  const client = await clientPromise;
-  const db = await clientPromise();  // ✅ trực tiếp lấy Db;
-  const sim = await db.collection("sims").findOne({ _id: new ObjectId(id) });
-
-  return NextResponse.json(sim);
+// Lấy chi tiết sim theo ID
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const db = await connectToDB();
+    const sim = await db.collection("sims").findOne({ _id: new ObjectId(params.id) });
+    return NextResponse.json(sim);
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }
 
-export async function PUT(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const { id } = await context.params; // <- phải await
-  const body = await req.json();
-  const client = await clientPromise;
-  const db = await clientPromise();  // ✅ trực tiếp lấy Db;
-  await db.collection("sims").updateOne(
-    { _id: new ObjectId(id) },
-    { $set: body }
-  );
-
-  return NextResponse.json({ message: "Updated successfully" });
+// Cập nhật sim
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const db = await connectToDB();
+    const body = await req.json();
+    await db.collection("sims").updateOne(
+      { _id: new ObjectId(params.id) },
+      { $set: body }
+    );
+    return NextResponse.json({ message: "Updated successfully" });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }
 
-export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const { id } = await context.params; // <- phải await
-  const client = await clientPromise;
-  const db = await clientPromise();  // ✅ trực tiếp lấy Db;
-  await db.collection("sims").deleteOne({ _id: new ObjectId(id) });
-
-  return NextResponse.json({ message: "Deleted successfully" });
+// Xóa sim
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const db = await connectToDB();
+    await db.collection("sims").deleteOne({ _id: new ObjectId(params.id) });
+    return NextResponse.json({ message: "Deleted successfully" });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }
