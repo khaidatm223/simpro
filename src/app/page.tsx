@@ -164,7 +164,7 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">📱 SimPro • Tìm Sim Số Đẹp</h1>
+      <h1 className="text-3xl font-bold mb-6">📱 SimPro • Tìm Số Đẹp</h1>
 
       {/* Tìm kiếm */}
       <div className="flex gap-2 mb-6">
