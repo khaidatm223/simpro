@@ -21,8 +21,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <header className="bg-white shadow sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
             <h1 className="font-bold text-lg">SimPro • Tìm Sim Số Đẹp</h1>
-            <span className="text-sm font-bold text-lg text-green-600">
-              LH: 098.6666.178
+            <span className="text-sm font-bold text-xl text-green-600">
+              📞: 098.6666.178
             </span>
           </div>
         </header>
