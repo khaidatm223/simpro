@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/mongoose";
-import Sim from "@/models/Sim";
+import { connectToDB } from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 
 // GET /api/sims/[id]
 export async function GET(
   req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await context.params; // 👈 Next.js 15 yêu cầu async
-  await dbConnect();
-  const sim = await Sim.findById(id);
+  const { id } = await context.params;
+  const db = await connectToDB();
+  const sim = await db.collection("sims").findOne({ _id: new ObjectId(id) });
+
   if (!sim) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
@@ -23,9 +24,13 @@ export async function PUT(
 ) {
   const { id } = await context.params;
   const body = await req.json();
-  await dbConnect();
-  const sim = await Sim.findByIdAndUpdate(id, body, { new: true });
-  return NextResponse.json(sim);
+  const db = await connectToDB();
+  await db
+    .collection("sims")
+    .updateOne({ _id: new ObjectId(id) }, { $set: body });
+
+  const updated = await db.collection("sims").findOne({ _id: new ObjectId(id) });
+  return NextResponse.json(updated);
 }
 
 // DELETE /api/sims/[id]
@@ -34,7 +39,8 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
-  await dbConnect();
-  await Sim.findByIdAndDelete(id);
+  const db = await connectToDB();
+  await db.collection("sims").deleteOne({ _id: new ObjectId(id) });
+
   return NextResponse.json({ message: "Deleted" });
 }
