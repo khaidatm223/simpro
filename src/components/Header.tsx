@@ -41,7 +41,7 @@ export default function Header() {
             </button>
 
             {open && (
-              <div className="absolute left-0 mt-2 w-60 bg-white border rounded-lg shadow-lg z-50">
+              <div className="absolute left-0 mt-2 w-70 bg-white border rounded-lg shadow-lg z-50">
                 <ul className="text-sm text-gray-700">
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                     <Link href="/huong-dan/dang-ky-sim">
@@ -49,10 +49,10 @@ export default function Header() {
                     </Link>
                   </li>
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    🔍 Hướng dẫn kiểm tra thông tin sim
+                    🔍 Hướng dẫn kiểm tra sim
                   </li>
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    🖼️ Hướng dẫn bằng hình ảnh
+                    🖼️ Hướng dẫn sử dụng web-app
                   </li>
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                     ✍️ Bài viết chi tiết

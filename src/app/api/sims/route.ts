@@ -35,3 +35,30 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
+
+// 👇 Thêm API POST để tạo sim mới
+export async function POST(req: Request) {
+  try {
+    const db = await connectToDB();
+    const body = await req.json();
+
+    // body: { so, gia, nhaMang, loaiSim, tags }
+    const result = await db.collection("sims").insertOne(body);
+
+    return NextResponse.json({
+      success: true,
+      insertedId: result.insertedId,
+    });
+  } catch (err: any) {
+    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+  }
+}
+export async function DELETE() {
+  try {
+    const db = await connectToDB();
+    await db.collection("sims").deleteMany({}); // xóa toàn bộ sims
+    return NextResponse.json({ message: "Đã xóa tất cả sim" });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}

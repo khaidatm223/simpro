@@ -23,6 +23,7 @@ export default function AdminPage() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalSims, setTotalSims] = useState(0);
   const [search, setSearch] = useState("");
   const [nhaMangFilter, setNhaMangFilter] = useState("");
   const [loaiSimFilter, setLoaiSimFilter] = useState("");
@@ -55,6 +56,7 @@ export default function AdminPage() {
     const data = await res.json();
     setSims(data.sims || []);
     setTotalPages(data.totalPages || 1);
+    setTotalSims(data.total || 0);
     setLoading(false);
   };
 
@@ -192,63 +194,107 @@ export default function AdminPage() {
       <h1 className="text-3xl font-bold mb-4">Admin • Quản trị Sim</h1>
 
       {/* Search & Filter */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex flex-col sm:flex-row gap-2 mb-4">
         <Input placeholder="Tìm số" value={search} onChange={(e) => setSearch(e.target.value)} />
         <Input placeholder="Nhà mạng" value={nhaMangFilter} onChange={(e) => setNhaMangFilter(e.target.value)} />
         <Input placeholder="Loại sim" value={loaiSimFilter} onChange={(e) => setLoaiSimFilter(e.target.value)} />
-        <Button onClick={() => setPage(1)}>Lọc</Button>
+        <Button onClick={() => setPage(1)} className="sm:w-auto w-full">Lọc</Button>
       </div>
 
+
       {/* Action buttons */}
-      <div className="flex gap-2 mb-4">
-        <Button onClick={() => setOpenForm(true)}>➕ Thêm Sim</Button>
-        <Button variant="destructive" onClick={handleDeleteSelected}>🗑️ Xóa nhiều</Button>
-        <Button variant="destructive" onClick={handleDeleteAll}>🚨 Xóa tất cả</Button>
-        <input type="file" accept=".xlsx,.xls" onChange={handleUploadExcel} />
+      <div className="flex flex-col sm:flex-row gap-2 mb-4">
+        <Button
+          onClick={() => {
+            setEditingSim(null);
+            setSo(""); setGia(0); setNhaMang(""); setLoaiSim(""); setTags("");
+            setOpenForm(true);
+          }}
+          className="sm:w-auto w-full"
+        >
+          ➕ Thêm Sim
+        </Button>
+
+        <Button variant="destructive" onClick={handleDeleteSelected} className="sm:w-auto w-full">
+          🗑️ Xóa nhiều
+        </Button>
+
+        <Button
+          variant="destructive"
+          onClick={async () => {
+            if (confirm("Bạn có chắc chắn muốn xóa TẤT CẢ sim không?")) {
+              await fetch("/api/sims", { method: "DELETE" });
+              fetchSims();
+            }
+          }}
+          className="sm:w-auto w-full"
+        >
+          🚨 Xóa tất cả
+        </Button>
+
+        <label>
+          <input
+            type="file"
+            accept=".xlsx,.xls"
+            onChange={handleUploadExcel}
+            className="hidden"
+          />
+          <Button asChild>
+            <span>📂 Import Excel</span>
+          </Button>
+        </label>
+
       </div>
 
       {loading ? (
         <p>Đang tải...</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full border border-gray-200">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="border px-4 py-2">
-                  <input type="checkbox" checked={selectAll} onChange={toggleSelectAll} />
-                </th>
-                <th className="border px-4 py-2">Số Sim</th>
-                <th className="border px-4 py-2">Giá</th>
-                <th className="border px-4 py-2">Nhà Mạng</th>
-                <th className="border px-4 py-2">Loại Sim</th>
-                <th className="border px-4 py-2">Tags</th>
-                <th className="border px-4 py-2">Hành động</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sims.map((sim) => (
-                <tr key={sim._id}>
-                  <td className="border px-4 py-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedSimIds.includes(sim._id)}
-                      onChange={() => toggleSelect(sim._id)}
-                    />
-                  </td>
-                  <td className="border px-4 py-2">{sim.so}</td>
-                  <td className="border px-4 py-2">{Number(sim.gia).toLocaleString()} đ</td>
-                  <td className="border px-4 py-2">{sim.nhaMang}</td>
-                  <td className="border px-4 py-2">{sim.loaiSim}</td>
-                  <td className="border px-4 py-2">{sim.tags?.join(", ")}</td>
-                  <td className="border px-4 py-2 flex gap-2">
-                    <Button size="sm" onClick={() => handleEdit(sim)}>Sửa</Button>
-                    <Button size="sm" variant="destructive" onClick={() => handleDelete(sim._id)}>Xóa</Button>
-                  </td>
+        <>
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="text-xl font-bold">Danh sách Sim</h2>
+            <span className="text-gray-600">Tổng cộng: {totalSims} sim</span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="min-w-full border border-gray-200">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="border px-4 py-2">
+                    <input type="checkbox" checked={selectAll} onChange={toggleSelectAll} />
+                  </th>
+                  <th className="border px-4 py-2">Số Sim</th>
+                  <th className="border px-4 py-2">Giá</th>
+                  <th className="border px-4 py-2">Nhà Mạng</th>
+                  <th className="border px-4 py-2">Loại Sim</th>
+                  <th className="border px-4 py-2">Tags</th>
+                  <th className="border px-4 py-2">Hành động</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {sims.map((sim) => (
+                  <tr key={sim._id}>
+                    <td className="border px-4 py-2">
+                      <input
+                        type="checkbox"
+                        checked={selectedSimIds.includes(sim._id)}
+                        onChange={() => toggleSelect(sim._id)}
+                      />
+                    </td>
+                    <td className="border px-4 py-2">{sim.so}</td>
+                    <td className="border px-4 py-2">{Number(sim.gia).toLocaleString()} đ</td>
+                    <td className="border px-4 py-2">{sim.nhaMang}</td>
+                    <td className="border px-4 py-2">{sim.loaiSim}</td>
+                    <td className="border px-4 py-2">{sim.tags?.join(", ")}</td>
+                    <td className="border px-4 py-2 flex gap-2">
+                      <Button size="sm" onClick={() => handleEdit(sim)}>Sửa</Button>
+                      <Button size="sm" variant="destructive" onClick={() => handleDelete(sim._id)}>Xóa</Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
       {/* Pagination */}
