@@ -279,7 +279,7 @@ export default function Home() {
               >
                 {/* Bên trái */}
                 <div className="flex flex-col">
-                  <span className="text-lg md:text-2xl font-bold text-blue-600">
+                  <span className="text-2xl md:text-3xl font-bold text-blue-600">
                     {sim.so}
                   </span>
                   <span className="text-xs md:text-sm text-gray-600 font-medium">
@@ -344,7 +344,7 @@ export default function Home() {
           >
             {/* Bên trái */}
             <div className="flex flex-col">
-              <span className="text-lg md:text-2xl font-bold text-blue-600">
+              <span className="text-2xl md:text-3xl font-bold text-blue-600">
                 {sim.so}
               </span>
               <span className="text-xs md:text-sm text-gray-600 font-medium">
