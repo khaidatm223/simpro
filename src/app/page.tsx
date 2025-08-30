@@ -128,7 +128,14 @@ export default function Home() {
 
 
   const filtered = sims.filter((sim) => {
-    const matchKeyword = keyword ? sim.so.endsWith(keyword) : true;
+    const normalizeNumber = (str: string) =>
+      str.replace(/[.,\s]/g, ""); // bỏ ., và khoảng trắng
+
+    const simSo = normalizeNumber(sim.so);
+    const searchKey = keyword ? normalizeNumber(keyword) : "";
+
+    const matchKeyword = searchKey ? simSo.endsWith(searchKey) : true;
+
     const matchNhaMang = nhaMang ? sim.nhaMang === nhaMang : true;
     let matchLoai = true;
     if (loaiSim) {
