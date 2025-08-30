@@ -37,6 +37,39 @@ export default function Home() {
   const [sending, setSending] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  const sendRequest = async (endpoint: string) => {
+    // ✅ Kiểm tra nhập bắt buộc
+    if (!name.trim() || !phone.trim()) {
+      setErrorMsg("Vui lòng nhập họ tên và số điện thoại!");
+      return;
+    }
+
+    setErrorMsg("");
+    setSending(true);
+
+    try {
+      const res = await fetch(`/api/${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          simId: selectedSim?.so,
+          name,
+          phone,
+          zalo,
+        }),
+      });
+
+      const data = await res.json();
+      alert(data.message);
+    } catch (err) {
+      alert("Có lỗi xảy ra, thử lại sau.");
+    }
+
+    setSending(false);
+  };
+
+
+
   const handleHold = async () => {
     if (!selectedSim) return;
     if (!name.trim() || !phone.trim()) {
@@ -84,10 +117,14 @@ export default function Home() {
   const highEndPerPage = 6; // 2 hàng x 3 cột
 
   useEffect(() => {
-    fetch("/api/sims")
-      .then((res) => res.json())
-      .then((data) => setSims(data));
+    const fetchSims = async () => {
+      const res = await fetch("/api/sims?page=1&limit=19999");
+      const data = await res.json();
+      setSims(data.sims || []);  // ✅ lấy mảng sims
+    };
+    fetchSims();
   }, []);
+
 
   const filtered = sims.filter((sim) => {
     const matchKeyword = keyword ? sim.so.endsWith(keyword) : true;
@@ -127,7 +164,7 @@ export default function Home() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">📱 SimPro • Tìm Sim Số Đẹp</h1>
+      <h1 className="text-3xl font-bold mb-6">📱 SimPro • Tìm Số Đẹp</h1>
 
       {/* Tìm kiếm */}
       <div className="flex gap-2 mb-6">
@@ -361,18 +398,18 @@ export default function Home() {
                 <Button
                   className="w-full bg-yellow-500 hover:bg-yellow-600 text-white"
                   disabled={sending}
-                  onClick={() => alert("Tính năng đặt cọc sẽ triển khai sau")}
+                  onClick={() => sendRequest("deposit")}
                 >
-                  Đặt cọc
+                  {sending ? "Đang gửi..." : "Đặt cọc"}
                 </Button>
 
                 {/* Thanh toán */}
                 <Button
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                   disabled={sending}
-                  onClick={() => alert("Tính năng thanh toán sẽ triển khai sau")}
+                  onClick={() => sendRequest("pay")}
                 >
-                  Thanh toán
+                  {sending ? "Đang gửi..." : "Thanh toán"}
                 </Button>
 
                 {/* Hủy */}

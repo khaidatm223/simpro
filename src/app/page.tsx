@@ -30,6 +30,7 @@ export default function Home() {
   const [nhaMang, setNhaMang] = useState("");
   const [gia, setGia] = useState("");
   const [loaiSim, setLoaiSim] = useState("");
+  const [menh, setMenh] = useState(""); // thêm state mới
   const [selectedSim, setSelectedSim] = useState<Sim | null>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -129,7 +130,27 @@ export default function Home() {
   const filtered = sims.filter((sim) => {
     const matchKeyword = keyword ? sim.so.endsWith(keyword) : true;
     const matchNhaMang = nhaMang ? sim.nhaMang === nhaMang : true;
-    const matchLoai = loaiSim ? sim.loaiSim === loaiSim : true;
+    let matchLoai = true;
+    if (loaiSim) {
+      if (loaiSim === "Hợp mệnh") {
+        if (menh) {
+          // so sánh không phân biệt hoa/thường và bỏ dấu
+          matchLoai =
+            removeVietnameseTones(sim.loaiSim) ===
+            removeVietnameseTones(`Hợp mệnh ${menh}`);
+        } else {
+          // chỉ chọn các sim có loại bắt đầu bằng "Hợp mệnh"
+          matchLoai =
+            removeVietnameseTones(sim.loaiSim).startsWith(
+              removeVietnameseTones("Hợp mệnh")
+            );
+        }
+      } else {
+        matchLoai =
+          removeVietnameseTones(sim.loaiSim) ===
+          removeVietnameseTones(loaiSim);
+      }
+    }
     let matchGia = true;
 
     if (gia === "1") matchGia = sim.gia < 1_000_000;
@@ -204,17 +225,44 @@ export default function Home() {
         <select
           className="border p-2 rounded"
           value={loaiSim}
-          onChange={(e) => setLoaiSim(e.target.value)}
+          onChange={(e) => {
+            setLoaiSim(e.target.value);
+            if (e.target.value !== "Hợp mệnh") {
+              setMenh(""); // reset nếu không phải Hợp mệnh
+            }
+          }}
         >
           <option value="">🔮 Loại sim</option>
           <option value="Lộc phát">Lộc phát</option>
           <option value="Thần tài">Thần tài</option>
           <option value="Tam hoa">Tam hoa</option>
           <option value="Tứ quý">Tứ quý</option>
-          <option value="Ngũ quý">Ngũ quý</option>
           <option value="Năm sinh">Năm sinh</option>
           <option value="Thượng Lưu">Thượng Lưu</option>
+          <option value="Hợp mệnh">Hợp mệnh</option>
+          <option value="Taxi">Taxi</option>
+          <option value="Dễ nhớ">Dễ nhớ</option>
+          <option value="Gánh đảo">Gánh đảo</option>
+          <option value="Tiến lên">Tiến lên</option>
+          <option value="Độc lạ">Độc lạ</option>
+
         </select>
+        {loaiSim === "Hợp mệnh" && (
+          <select
+            className="border p-2 rounded ml-2"
+            value={menh}
+            onChange={(e) => setMenh(e.target.value)}
+          >
+            <option value="">-- Chọn mệnh --</option>
+            <option value="Hỏa">Hỏa</option>
+            <option value="Kim">Kim</option>
+            <option value="Mộc">Mộc</option>
+            <option value="Thủy">Thủy</option>
+            <option value="Thổ">Thổ</option>
+          </select>
+        )}
+
+
       </div>
 
       {/* Sim Thượng Lưu */}
