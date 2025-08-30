@@ -37,7 +37,7 @@ export default function Header() {
               onClick={() => setOpen(!open)}
               className="font-bold text-lg text-gray-700 hover:text-blue-600"
             >
-              Hướng Dẫn ▼
+              Hướng Dẫn
             </button>
 
             {open && (
@@ -66,7 +66,7 @@ export default function Header() {
         {/* Hotline */}
         <a
           href="tel:0986666178"
-          className="text-xl font-bold text-green-600 hover:text-green-700 transition"
+          className="text-ms font-bold text-green-600 hover:text-green-700 transition"
         >
           📞 098.6666.178
         </a>
