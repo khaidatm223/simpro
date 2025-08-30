@@ -242,7 +242,7 @@ export default function Home() {
           <option value="Hợp mệnh">Hợp mệnh</option>
           <option value="Taxi">Taxi</option>
           <option value="Dễ nhớ">Dễ nhớ</option>
-          <option value="Gánh đảo">Gánh đảo</option>
+          <option value="Cặp gánh đảo">Cặp gánh đảo</option>
           <option value="Tiến lên">Tiến lên</option>
           <option value="Độc lạ">Độc lạ</option>
 
@@ -275,26 +275,26 @@ export default function Home() {
             {currentHighEndSims.map((sim) => (
               <Card
                 key={sim.id}
-                className="relative shadow-lg hover:shadow-2xl transition rounded-2xl p-4 bg-gradient-to-br from-yellow-100 to-yellow-50 border border-yellow-300"
+                className="flex justify-between items-center p-1.5 md:p-2.5 rounded-xl border border-gray-300 shadow-sm hover:shadow-md transition bg-transparent"
               >
-                <div className="text-center mb-4">
-                  <h2 className="text-3xl md:text-4xl font-extrabold text-red-700 tracking-wider">
+                {/* Bên trái */}
+                <div className="flex flex-col">
+                  <span className="text-lg md:text-2xl font-bold text-blue-600">
                     {sim.so}
-                  </h2>
+                  </span>
+                  <span className="text-xs md:text-sm text-gray-600 font-medium">
+                    📶 {sim.nhaMang}
+                  </span>
                 </div>
 
-                <div className="flex flex-col gap-2 text-left text-gray-800">
-                  <p className="font-semibold">📶 {sim.nhaMang}</p>
-                  <p className="font-medium">🔮 {sim.loaiSim}</p>
-                  <p className="text-sm font-extrabold text-gray-600">
-                    💰 Giá: {Number(sim.gia || 0).toLocaleString()} đ
-                  </p>
-                </div>
-
-                <div className="absolute bottom-4 right-4">
+                {/* Bên phải */}
+                <div className="flex flex-col items-end">
+                  <span className="text-base md:text-1xl font-bold text-green-600 mb-1">
+                    {Number(sim.gia || 0).toLocaleString()} đ
+                  </span>
                   <Button
                     size="sm"
-                    className="rounded-full px-4 py-2 shadow-md bg-blue-500 text-white hover:bg-blue-600"
+                    className="px-1 py-0.2 rounded-md shadow bg-blue-500 text-white hover:bg-blue-600 text-xs"
                     onClick={() => setSelectedSim(sim)}
                   >
                     Giữ số
@@ -335,37 +335,39 @@ export default function Home() {
       )}
 
       {/* Danh sách sim thường */}
-      <h2 className="text-2xl font-bold mb-4">📋 Sim Tổng Hợp</h2>
+      <h2 className="text-2xl font-bold mb-4 text-yellow-600">📋 Sim Tổng Hợp</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {currentSims.map((sim) => (
           <Card
             key={sim.id}
-            className="relative shadow-md hover:shadow-lg hover:border-blue-400 transition rounded-2xl p-4 bg-gray-70 border border-gray-300"
+            className="flex justify-between items-center p-1.5 md:p-2.5 rounded-xl border border-gray-300 shadow-sm hover:shadow-md transition bg-transparent"
           >
-            <div className="text-center mb-4">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-red-600 tracking-wider">
+            {/* Bên trái */}
+            <div className="flex flex-col">
+              <span className="text-lg md:text-2xl font-bold text-blue-600">
                 {sim.so}
-              </h2>
+              </span>
+              <span className="text-xs md:text-sm text-gray-600 font-medium">
+                📶 {sim.nhaMang}
+              </span>
             </div>
 
-            <div className="flex flex-col gap-2 text-left text-gray-700">
-              <p className="font-semibold">📶 {sim.nhaMang}</p>
-              <p className="font-medium">🔮 {sim.loaiSim}</p>
-              <p className="text-sm font-extrabold text-gray-600">
-                💰 Giá: {Number(sim.gia || 0).toLocaleString()} đ
-              </p>
-            </div>
-
-            <div className="absolute bottom-4 right-4">
+            {/* Bên phải */}
+            <div className="flex flex-col items-end">
+              <span className="text-base md:text-1xl font-bold text-green-600 mb-1">
+                {Number(sim.gia || 0).toLocaleString()} đ
+              </span>
               <Button
                 size="sm"
-                className="rounded-full px-4 py-2 shadow-md bg-blue-500 text-white hover:bg-blue-600"
+                className="px-1 py-0.2 rounded-md shadow bg-blue-500 text-white hover:bg-blue-600 text-xs"
                 onClick={() => setSelectedSim(sim)}
               >
                 Giữ số
               </Button>
             </div>
           </Card>
+
+
         ))}
       </div>
 
