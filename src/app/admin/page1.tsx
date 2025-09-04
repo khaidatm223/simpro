@@ -63,13 +63,11 @@ export default function AdminPage() {
   
   };
 
-  
   useEffect(() => {
     fetchSims();
   }, [page, limit, search, nhaMangFilter, loaiSimFilter]);
-  
 
-  // Thêm / Sửa sim /currentUser.username
+  // Thêm / Sửa sim
   const handleSubmit = async () => {
     const simData = {
       so,
@@ -77,7 +75,6 @@ export default function AdminPage() {
       nhaMang,
       loaiSim,
       tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
-      owner: "admin",
     };
 
     try {
@@ -166,9 +163,7 @@ export default function AdminPage() {
     setOpenForm(true);
   };
 
-  // Giả sử bạn chỉ test với 1 user cố định (ví dụ "admin")
-  const currentUser = "admin"; // chuỗi, không phải object
-
+  // Upload Excel
   const handleUploadExcel = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -178,14 +173,12 @@ export default function AdminPage() {
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const rows: any[] = XLSX.utils.sheet_to_json(sheet);
 
-    // Gán owner trực tiếp bằng currentUser
     const simsToImport = rows.map((row) => ({
       so: String(row.so || "").trim(),
       gia: Number(row.gia) || 0,
       nhaMang: row.nhaMang || "",
       loaiSim: row.loaiSim || "",
       tags: row.tags ? String(row.tags).split(",").map((t) => t.trim()) : [],
-      owner: currentUser, // 👈 gán trực tiếp, không dùng .username
     }));
 
     const res = await fetch("/api/sims/bulk", {
@@ -196,10 +189,8 @@ export default function AdminPage() {
 
     const result = await res.json();
     alert(`Đã import thành công ${result.insertedCount || 0} sim`);
-    fetchSims(); // reload danh sách
+    fetchSims();
   };
-
-
 
   return (
     <div className="container mx-auto p-6">

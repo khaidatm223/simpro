@@ -207,30 +207,6 @@ export default function Home() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <select
           className="border p-2 rounded"
-          value={nhaMang}
-          onChange={(e) => setNhaMang(e.target.value)}
-        >
-          <option value="">📶 Nhà mạng</option>
-          <option value="Viettel">Viettel</option>
-          <option value="Vinaphone">Vinaphone</option>
-          <option value="Mobifone">Mobifone</option>
-          <option value="Vietnamobile">Vietnamobile</option>
-        </select>
-
-        <select
-          className="border p-2 rounded"
-          value={gia}
-          onChange={(e) => setGia(e.target.value)}
-        >
-          <option value="">💰 Khoảng giá</option>
-          <option value="1">Dưới 1 triệu</option>
-          <option value="2">1–5 triệu</option>
-          <option value="3">5–10 triệu</option>
-          <option value="4">Trên 10 triệu</option>
-        </select>
-
-        <select
-          className="border p-2 rounded"
           value={loaiSim}
           onChange={(e) => {
             setLoaiSim(e.target.value);
@@ -268,6 +244,32 @@ export default function Home() {
             <option value="Thổ">Thổ</option>
           </select>
         )}
+        
+        <select
+          className="border p-2 rounded"
+          value={nhaMang}
+          onChange={(e) => setNhaMang(e.target.value)}
+        >
+          <option value="">📶 Nhà mạng</option>
+          <option value="Viettel">Viettel</option>
+          <option value="Vinaphone">Vinaphone</option>
+          <option value="Mobifone">Mobifone</option>
+          <option value="Vietnamobile">Vietnamobile</option>
+        </select>
+
+        <select
+          className="border p-2 rounded"
+          value={gia}
+          onChange={(e) => setGia(e.target.value)}
+        >
+          <option value="">💰 Khoảng giá</option>
+          <option value="1">Dưới 1 triệu</option>
+          <option value="2">1–5 triệu</option>
+          <option value="3">5–10 triệu</option>
+          <option value="4">Trên 10 triệu</option>
+        </select>
+
+        
 
 
       </div>

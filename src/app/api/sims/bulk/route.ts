@@ -1,30 +1,28 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { connectToDB } from "@/lib/mongodb";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const db = await connectToDB();
     const { sims } = await req.json();
 
-    if (!Array.isArray(sims) || sims.length === 0) {
-      return NextResponse.json({ error: "No sims provided" }, { status: 400 });
+    if (!Array.isArray(sims)) {
+      return NextResponse.json({ success: false, message: "Invalid data" }, { status: 400 });
     }
 
-    // Chuẩn hóa dữ liệu
-    const docs = sims.map((sim) => ({
-      so: sim.so,
-      gia: Number(sim.gia) || 0,
-      nhaMang: sim.nhaMang || "",
-      loaiSim: sim.loaiSim || "",
-      tags: sim.tags || [],
+    // Đảm bảo tất cả sim đều có owner
+    const simsWithOwner = sims.map(sim => ({
+      ...sim,
+      owner: sim.owner || "unknown", // 👈 giữ lại owner đã gửi từ FE
     }));
 
-    const result = await db.collection("sims").insertMany(docs);
+    const result = await db.collection("sims").insertMany(simsWithOwner);
+
     return NextResponse.json({
-      message: "Bulk insert success",
+      success: true,
       insertedCount: result.insertedCount,
     });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }
