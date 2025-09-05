@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 type PaginationProps = {
@@ -13,31 +13,30 @@ export default function Pagination({
   totalPages,
   onPageChange,
 }: PaginationProps) {
-  // Nếu chưa có trang hoặc chỉ có 1 trang → không render
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) return null; // 🚀 Chỉ render Pagination sau khi client mount
+
   const safeTotalPages = Math.max(1, Number(totalPages) || 1);
   if (safeTotalPages <= 1) return null;
 
   const getPages = () => {
     const pages: (number | string)[] = [];
-
     if (safeTotalPages <= 7) {
-      // Nếu ít trang thì show hết
       for (let i = 1; i <= safeTotalPages; i++) pages.push(i);
     } else {
-      pages.push(1); // Trang đầu
-
+      pages.push(1);
       if (currentPage > 4) pages.push("...");
-
       const start = Math.max(2, currentPage - 2);
       const end = Math.min(safeTotalPages - 1, currentPage + 2);
-
       for (let i = start; i <= end; i++) pages.push(i);
-
       if (currentPage < safeTotalPages - 3) pages.push("...");
-
-      pages.push(safeTotalPages); // Trang cuối
+      pages.push(safeTotalPages);
     }
-
     return pages;
   };
 
@@ -47,7 +46,6 @@ export default function Pagination({
         size="sm"
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
-        aria-label="Trang trước"
       >
         Prev
       </Button>
@@ -73,12 +71,10 @@ export default function Pagination({
         size="sm"
         disabled={currentPage === safeTotalPages}
         onClick={() => onPageChange(currentPage + 1)}
-        aria-label="Trang sau"
       >
         Next
       </Button>
 
-      {/* Hiển thị tổng số trang */}
       <span className="text-sm text-gray-500 px-2">
         Trang {currentPage}/{safeTotalPages}
       </span>
