@@ -190,25 +190,28 @@ export default function Home() {
     (sim) => removeVietnameseTones(sim.loaiSim || "") !== "thuong luu"
   );
 
-  // Lấy trang hiện tại cho High-End
-  const totalHighEndPages = highEndSims.length > 0
-    ? Math.ceil(highEndSims.length / highEndPerPage)
-    : 1;
+  // High-End Sims
+  const totalHighEndPages = Math.max(
+    1,
+    Math.ceil(highEndSims.length / highEndPerPage)
+  );
 
   const currentHighEndSims = highEndSims.slice(
     (currentHighEndPage - 1) * highEndPerPage,
     currentHighEndPage * highEndPerPage
   );
 
-  // Lấy trang hiện tại cho Normal Sims
-  const totalNormalPages = normalSims.length > 0
-    ? Math.ceil(normalSims.length / simsPerPage)
-    : 1;
+  // Normal Sims
+  const totalNormalPages = Math.max(
+    1,
+    Math.ceil(normalSims.length / simsPerPage)
+  );
 
   const currentSims = normalSims.slice(
     (currentPage - 1) * simsPerPage,
     currentPage * simsPerPage
   );
+
 
 
   return (
@@ -334,7 +337,7 @@ export default function Home() {
             ))}
           </div>
 
-          {totalHighEndPages > 1 && (
+          {totalHighEndPages > 1 && currentHighEndSims.length > 0 && (
             <Pagination
               currentPage={currentHighEndPage}
               totalPages={totalHighEndPages}
@@ -384,7 +387,7 @@ export default function Home() {
         ))}
       </div>
       
-      {totalNormalPages > 1 && (
+      {totalNormalPages > 1 && currentSims.length > 0 && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalNormalPages}
