@@ -178,9 +178,10 @@ export default function Home() {
 
     return matchKeyword && matchNhaMang && matchLoai && matchGia;
   });
-  
-  const totalNormalPages = Math.ceil(sims.length / simsPerPage);
 
+  
+
+  
   // Tách riêng sim Thượng Lưu
   const highEndSims = filtered.filter(
     (sim) => removeVietnameseTones(sim.loaiSim || "") === "thuong luu"
@@ -197,7 +198,7 @@ export default function Home() {
   );
 
   // Lấy trang hiện tại cho Normal Sims
-  const totalPages = Math.ceil(normalSims.length / simsPerPage);
+  const totalNormalPages = Math.ceil(normalSims.length / simsPerPage);
   const currentSims = normalSims.slice(
     (currentPage - 1) * simsPerPage,
     currentPage * simsPerPage
