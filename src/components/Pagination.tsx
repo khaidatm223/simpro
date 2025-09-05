@@ -13,8 +13,9 @@ export default function Pagination({
   totalPages,
   onPageChange,
 }: PaginationProps) {
-  // Đảm bảo totalPages luôn là số >= 1
+  // Nếu chưa có trang hoặc chỉ có 1 trang → không render
   const safeTotalPages = Math.max(1, Number(totalPages) || 1);
+  if (safeTotalPages <= 1) return null;
 
   const getPages = () => {
     const pages: (number | string)[] = [];
@@ -41,18 +42,19 @@ export default function Pagination({
   };
 
   return (
-    <div className="flex justify-center mt-4 gap-2">
+    <div className="flex flex-wrap justify-center mt-4 gap-2 items-center">
       <Button
         size="sm"
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
+        aria-label="Trang trước"
       >
         Prev
       </Button>
 
       {getPages().map((p, idx) =>
         p === "..." ? (
-          <span key={idx} className="px-2">
+          <span key={idx} className="px-2 text-gray-500">
             ...
           </span>
         ) : (
@@ -71,9 +73,15 @@ export default function Pagination({
         size="sm"
         disabled={currentPage === safeTotalPages}
         onClick={() => onPageChange(currentPage + 1)}
+        aria-label="Trang sau"
       >
         Next
       </Button>
+
+      {/* Hiển thị tổng số trang */}
+      <span className="text-sm text-gray-500 px-2">
+        Trang {currentPage}/{safeTotalPages}
+      </span>
     </div>
   );
 }
