@@ -120,15 +120,27 @@ export default function Home() {
   const highEndPerPage = 6; // 2 hàng x 3 cột
 
   // 👇 Đặt ngoài useEffect
-  const fetchSims = async () => {
-    const res = await fetch("/api/sims?page=1&limit=19999");
-    const data = await res.json();
-    setSims(data.sims || []);
-  };
-
   useEffect(() => {
+    const fetchSims = async () => {
+      try {
+        const res = await fetch("/api/sims?page=1&limit=19999");
+        const data = await res.json();
+
+        // ✅ set luôn state sims
+        if (Array.isArray(data.sims)) {
+          setSims(data.sims);
+        } else {
+          setSims([]);
+        }
+      } catch (err) {
+        console.error("Lỗi fetch sims:", err);
+        setSims([]);
+      }
+    };
+
     fetchSims();
-  }, []); // <- giờ ESLint sẽ không warning nữa
+  }, []);
+
 
 
 
