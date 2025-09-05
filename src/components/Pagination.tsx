@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 
 type PaginationProps = {
@@ -13,32 +13,51 @@ export default function Pagination({
   totalPages,
   onPageChange,
 }: PaginationProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Nếu chưa mounted (SSR) thì không render phân trang
-  if (!mounted) return null;
-
   const safeTotalPages = Math.max(1, Number(totalPages) || 1);
 
   const getPages = () => {
     const pages: (number | string)[] = [];
-    pages.push(1);
 
-    if (currentPage > 3) pages.push("...");
-
-    for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-      if (i > 1 && i < safeTotalPages) {
+    if (safeTotalPages <= 7) {
+      // Nếu ít hơn hoặc bằng 7 trang thì hiển thị hết
+      for (let i = 1; i <= safeTotalPages; i++) {
         pages.push(i);
       }
+    } else {
+      // Luôn có trang đầu
+      pages.push(1);
+
+      let left = currentPage - 1;
+      let right = currentPage + 1;
+
+      // Nếu currentPage gần đầu
+      if (currentPage <= 3) {
+        left = 2;
+        right = 4;
+      }
+      // Nếu currentPage gần cuối
+      else if (currentPage >= safeTotalPages - 2) {
+        left = safeTotalPages - 3;
+        right = safeTotalPages - 1;
+      }
+
+      if (left > 2) {
+        pages.push("...");
+      }
+
+      for (let i = left; i <= right; i++) {
+        if (i > 1 && i < safeTotalPages) {
+          pages.push(i);
+        }
+      }
+
+      if (right < safeTotalPages - 1) {
+        pages.push("...");
+      }
+
+      // Luôn có trang cuối
+      pages.push(safeTotalPages);
     }
-
-    if (currentPage < safeTotalPages - 2) pages.push("...");
-
-    if (safeTotalPages > 1) pages.push(safeTotalPages);
 
     return pages;
   };
