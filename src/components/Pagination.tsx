@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 type PaginationProps = {
@@ -13,42 +13,38 @@ export default function Pagination({
   totalPages,
   onPageChange,
 }: PaginationProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Nếu chưa mounted (SSR) thì không render phân trang
+  if (!mounted) return null;
+
   const safeTotalPages = Math.max(1, Number(totalPages) || 1);
-  if (safeTotalPages <= 1) return null;
 
   const getPages = () => {
     const pages: (number | string)[] = [];
-
-    // Luôn có trang đầu
     pages.push(1);
 
-    // Nếu currentPage > 3 → chèn "..."
-    if (currentPage > 3) {
-      pages.push("...");
-    }
+    if (currentPage > 3) pages.push("...");
 
-    // Lấy khoảng currentPage-1, currentPage, currentPage+1
     for (let i = currentPage - 1; i <= currentPage + 1; i++) {
       if (i > 1 && i < safeTotalPages) {
         pages.push(i);
       }
     }
 
-    // Nếu currentPage < totalPages - 2 → chèn "..."
-    if (currentPage < safeTotalPages - 2) {
-      pages.push("...");
-    }
+    if (currentPage < safeTotalPages - 2) pages.push("...");
 
-    // Luôn có trang cuối
-    if (safeTotalPages > 1) {
-      pages.push(safeTotalPages);
-    }
+    if (safeTotalPages > 1) pages.push(safeTotalPages);
 
     return pages;
   };
 
   return (
-    <div className="flex flex-wrap justify-center mt-4 gap-2 items-center">
+    <div className="flex justify-center mt-4 gap-2">
       <Button
         size="sm"
         disabled={currentPage === 1}
@@ -59,9 +55,7 @@ export default function Pagination({
 
       {getPages().map((p, idx) =>
         p === "..." ? (
-          <span key={idx} className="px-2 text-gray-500">
-            ...
-          </span>
+          <span key={idx} className="px-2">...</span>
         ) : (
           <Button
             key={p}
@@ -81,10 +75,6 @@ export default function Pagination({
       >
         Next
       </Button>
-
-      <span className="text-sm text-gray-500 px-2">
-        Trang {currentPage}/{safeTotalPages}
-      </span>
     </div>
   );
 }
