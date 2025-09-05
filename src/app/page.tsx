@@ -178,6 +178,8 @@ export default function Home() {
 
     return matchKeyword && matchNhaMang && matchLoai && matchGia;
   });
+  
+  const totalNormalPages = Math.ceil(sims.length / simsPerPage);
 
   // Tách riêng sim Thượng Lưu
   const highEndSims = filtered.filter(
@@ -325,32 +327,12 @@ export default function Home() {
           </div>
 
           {/* Pagination High-End */}
-          <div className="flex justify-center mt-4 gap-2">
-            <Button
-              size="sm"
-              disabled={currentHighEndPage === 1}
-              onClick={() => setCurrentHighEndPage((p) => p - 1)}
-            >
-              Prev
-            </Button>
-            {Array.from({ length: totalHighEndPages }, (_, i) => (
-              <Button
-                key={i}
-                size="sm"
-                variant={currentHighEndPage === i + 1 ? "default" : "outline"}
-                onClick={() => setCurrentHighEndPage(i + 1)}
-              >
-                {i + 1}
-              </Button>
-            ))}
-            <Button
-              size="sm"
-              disabled={currentHighEndPage === totalHighEndPages}
-              onClick={() => setCurrentHighEndPage((p) => p + 1)}
-            >
-              Next
-            </Button>
-          </div>
+          <Pagination
+            currentPage={currentHighEndPage}
+            totalPages={totalHighEndPages}
+            onPageChange={setCurrentHighEndPage}
+          />
+
 
 
         </div>
@@ -392,51 +374,15 @@ export default function Home() {
 
         ))}
       </div>
-
+      
       {/* Pagination Normal Sims */}
-      {/* Pagination Normal Sims */}
-      <div className="flex justify-center mt-4 gap-2">
-        <Button
-          size="sm"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((p) => p - 1)}
-        >
-          Prev
-        </Button>
+      
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalNormalPages}
+        onPageChange={setCurrentPage}
+      />
 
-        {Array.from({ length: totalPages }, (_, i) => i + 1)
-          .filter((page) => {
-            if (totalPages <= 7) return true;
-            if (page === 1 || page === totalPages) return true;
-            if (page >= currentPage - 1 && page <= currentPage + 1) return true;
-            return false;
-          })
-          .map((page, idx, arr) => {
-            const prevPage = arr[idx - 1];
-            const needDots = prevPage && page - prevPage > 1;
-
-            return (
-              <React.Fragment key={page}>
-                {needDots && <span className="px-2">...</span>}
-                <Button
-                  size="sm"
-                  variant={currentPage === page ? "default" : "outline"}
-                  onClick={() => setCurrentPage(page)}
-                >
-                  {page}
-                </Button>
-              </React.Fragment>
-            );
-          })}
-
-        <Button
-          size="sm"
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage((p) => p + 1)}
-        >
-          Next
-        </Button>
-      </div>
 
 
       
