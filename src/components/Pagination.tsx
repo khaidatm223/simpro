@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 
 type PaginationProps = {
@@ -13,30 +13,37 @@ export default function Pagination({
   totalPages,
   onPageChange,
 }: PaginationProps) {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) return null; // 🚀 Chỉ render Pagination sau khi client mount
-
   const safeTotalPages = Math.max(1, Number(totalPages) || 1);
   if (safeTotalPages <= 1) return null;
 
   const getPages = () => {
     const pages: (number | string)[] = [];
-    if (safeTotalPages <= 7) {
-      for (let i = 1; i <= safeTotalPages; i++) pages.push(i);
-    } else {
-      pages.push(1);
-      if (currentPage > 4) pages.push("...");
-      const start = Math.max(2, currentPage - 2);
-      const end = Math.min(safeTotalPages - 1, currentPage + 2);
-      for (let i = start; i <= end; i++) pages.push(i);
-      if (currentPage < safeTotalPages - 3) pages.push("...");
+
+    // Luôn có trang đầu
+    pages.push(1);
+
+    // Nếu currentPage > 3 → chèn "..."
+    if (currentPage > 3) {
+      pages.push("...");
+    }
+
+    // Lấy khoảng currentPage-1, currentPage, currentPage+1
+    for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+      if (i > 1 && i < safeTotalPages) {
+        pages.push(i);
+      }
+    }
+
+    // Nếu currentPage < totalPages - 2 → chèn "..."
+    if (currentPage < safeTotalPages - 2) {
+      pages.push("...");
+    }
+
+    // Luôn có trang cuối
+    if (safeTotalPages > 1) {
       pages.push(safeTotalPages);
     }
+
     return pages;
   };
 
