@@ -121,12 +121,11 @@ export default function Home() {
 
   // 👇 Đặt ngoài useEffect
   useEffect(() => {
-    const fetchSims = async () => {
+    (async () => {
       try {
         const res = await fetch("/api/sims?page=1&limit=19999");
         const data = await res.json();
 
-        // ✅ set luôn state sims
         if (Array.isArray(data.sims)) {
           setSims(data.sims);
         } else {
@@ -136,10 +135,9 @@ export default function Home() {
         console.error("Lỗi fetch sims:", err);
         setSims([]);
       }
-    };
-
-    fetchSims();
+    })();
   }, []);
+
 
 
 
