@@ -119,23 +119,17 @@ export default function Home() {
   const [currentHighEndPage, setCurrentHighEndPage] = useState(1);
   const highEndPerPage = 6; // 2 hàng x 3 cột
 
+  // 👇 Đặt ngoài useEffect
+  const fetchSims = async () => {
+    const res = await fetch("/api/sims?page=1&limit=19999");
+    const data = await res.json();
+    setSims(data.sims || []);
+  };
+
   useEffect(() => {
-    const fetchSims = async () => {
-      const res = await fetch("/api/sims?page=1&limit=19999");
-      const data = await res.json();
-      setSims(data.sims || []);  // ✅ lấy mảng sims
-      // 👉 Tổng số trang
-      const totalHighEndPages = Math.ceil(sims.length / highEndPerPage);
-
-      // 👉 Các sim của trang hiện tại
-      const currentHighEndSims = sims.slice(
-        (currentHighEndPage - 1) * highEndPerPage,
-        currentHighEndPage * highEndPerPage
-      );
-
-    };
     fetchSims();
-  }, []);
+  }, []); // <- giờ ESLint sẽ không warning nữa
+
 
 
   const filtered = sims.filter((sim) => {
