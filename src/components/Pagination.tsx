@@ -8,26 +8,33 @@ type PaginationProps = {
   onPageChange: (page: number) => void;
 };
 
-export default function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
+export default function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: PaginationProps) {
+  // Đảm bảo totalPages luôn là số >= 1
+  const safeTotalPages = Math.max(1, Number(totalPages) || 1);
+
   const getPages = () => {
     const pages: (number | string)[] = [];
 
-    if (totalPages <= 7) {
+    if (safeTotalPages <= 7) {
       // Nếu ít trang thì show hết
-      for (let i = 1; i <= totalPages; i++) pages.push(i);
+      for (let i = 1; i <= safeTotalPages; i++) pages.push(i);
     } else {
       pages.push(1); // Trang đầu
 
       if (currentPage > 4) pages.push("...");
 
       const start = Math.max(2, currentPage - 2);
-      const end = Math.min(totalPages - 1, currentPage + 2);
+      const end = Math.min(safeTotalPages - 1, currentPage + 2);
 
       for (let i = start; i <= end; i++) pages.push(i);
 
-      if (currentPage < totalPages - 3) pages.push("...");
+      if (currentPage < safeTotalPages - 3) pages.push("...");
 
-      pages.push(totalPages); // Trang cuối
+      pages.push(safeTotalPages); // Trang cuối
     }
 
     return pages;
@@ -45,7 +52,9 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
 
       {getPages().map((p, idx) =>
         p === "..." ? (
-          <span key={idx} className="px-2">...</span>
+          <span key={idx} className="px-2">
+            ...
+          </span>
         ) : (
           <Button
             key={p}
@@ -60,7 +69,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
 
       <Button
         size="sm"
-        disabled={currentPage === totalPages}
+        disabled={currentPage === safeTotalPages}
         onClick={() => onPageChange(currentPage + 1)}
       >
         Next
