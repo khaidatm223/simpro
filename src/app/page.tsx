@@ -1,4 +1,6 @@
 "use client";
+import Pagination from "@/components/Pagination";
+import React from "react";
 
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -122,6 +124,15 @@ export default function Home() {
       const res = await fetch("/api/sims?page=1&limit=19999");
       const data = await res.json();
       setSims(data.sims || []);  // ✅ lấy mảng sims
+      // 👉 Tổng số trang
+      const totalHighEndPages = Math.ceil(sims.length / highEndPerPage);
+
+      // 👉 Các sim của trang hiện tại
+      const currentHighEndSims = sims.slice(
+        (currentHighEndPage - 1) * highEndPerPage,
+        currentHighEndPage * highEndPerPage
+      );
+
     };
     fetchSims();
   }, []);
@@ -340,6 +351,8 @@ export default function Home() {
               Next
             </Button>
           </div>
+
+
         </div>
       )}
 
@@ -381,7 +394,8 @@ export default function Home() {
       </div>
 
       {/* Pagination Normal Sims */}
-      <div className="flex justify-center mt-6 gap-2">
+      {/* Pagination Normal Sims */}
+      <div className="flex justify-center mt-4 gap-2">
         <Button
           size="sm"
           disabled={currentPage === 1}
@@ -389,16 +403,32 @@ export default function Home() {
         >
           Prev
         </Button>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <Button
-            key={i}
-            size="sm"
-            variant={currentPage === i + 1 ? "default" : "outline"}
-            onClick={() => setCurrentPage(i + 1)}
-          >
-            {i + 1}
-          </Button>
-        ))}
+
+        {Array.from({ length: totalPages }, (_, i) => i + 1)
+          .filter((page) => {
+            if (totalPages <= 7) return true;
+            if (page === 1 || page === totalPages) return true;
+            if (page >= currentPage - 1 && page <= currentPage + 1) return true;
+            return false;
+          })
+          .map((page, idx, arr) => {
+            const prevPage = arr[idx - 1];
+            const needDots = prevPage && page - prevPage > 1;
+
+            return (
+              <React.Fragment key={page}>
+                {needDots && <span className="px-2">...</span>}
+                <Button
+                  size="sm"
+                  variant={currentPage === page ? "default" : "outline"}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </Button>
+              </React.Fragment>
+            );
+          })}
+
         <Button
           size="sm"
           disabled={currentPage === totalPages}
@@ -407,6 +437,12 @@ export default function Home() {
           Next
         </Button>
       </div>
+
+
+      
+
+
+
 
       {/* Dialog Giữ số */}
       <Dialog open={!!selectedSim} onOpenChange={() => setSelectedSim(null)}>
