@@ -191,18 +191,25 @@ export default function Home() {
   );
 
   // Lấy trang hiện tại cho High-End
-  const totalHighEndPages = Math.ceil(highEndSims.length / highEndPerPage);
+  const totalHighEndPages = highEndSims.length > 0
+    ? Math.ceil(highEndSims.length / highEndPerPage)
+    : 1;
+
   const currentHighEndSims = highEndSims.slice(
     (currentHighEndPage - 1) * highEndPerPage,
     currentHighEndPage * highEndPerPage
   );
 
   // Lấy trang hiện tại cho Normal Sims
-  const totalNormalPages = Math.ceil(normalSims.length / simsPerPage);
+  const totalNormalPages = normalSims.length > 0
+    ? Math.ceil(normalSims.length / simsPerPage)
+    : 1;
+
   const currentSims = normalSims.slice(
     (currentPage - 1) * simsPerPage,
     currentPage * simsPerPage
   );
+
 
   return (
     <div className="container mx-auto p-6">
@@ -327,12 +334,13 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Pagination High-End */}
-          <Pagination
-            currentPage={currentHighEndPage}
-            totalPages={totalHighEndPages}
-            onPageChange={setCurrentHighEndPage}
-          />
+          {totalHighEndPages > 1 && (
+            <Pagination
+              currentPage={currentHighEndPage}
+              totalPages={totalHighEndPages}
+              onPageChange={setCurrentHighEndPage}
+            />
+          )}
 
 
 
@@ -376,13 +384,13 @@ export default function Home() {
         ))}
       </div>
       
-      {/* Pagination Normal Sims */}
-      
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalNormalPages}
-        onPageChange={setCurrentPage}
-      />
+      {totalNormalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalNormalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
 
 
 
