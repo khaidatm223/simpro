@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog } from "@/components/ui/dialog";
-export const dynamic = 'force-dynamic';
+
 interface Sim {
   id: string;
   so: string;
@@ -296,7 +296,7 @@ export default function Home() {
       {highEndSims.length > 0 && (
         <div className="mb-10">
           <h2 className="text-2xl font-bold mb-4 text-yellow-600">
-            🌟 Sim Thượng Lưu
+            🌟 Sim mới về
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {currentHighEndSims.map((sim) => (
