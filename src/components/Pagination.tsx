@@ -15,26 +15,15 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
     setIsMounted(true);
   }, []);
 
-  const getPages = () => {
-    const pages: (number | string)[] = [];
-
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) pages.push(i);
-    } else {
-      pages.push(1);
-      if (currentPage > 4) pages.push("...");
-      const start = Math.max(2, currentPage - 2);
-      const end = Math.min(totalPages - 1, currentPage + 2);
-      for (let i = start; i <= end; i++) pages.push(i);
-      if (currentPage < totalPages - 3) pages.push("...");
-      pages.push(totalPages);
-    }
-
-    return pages;
-  };
-
-  // 🚀 Chỉ render pagination sau khi client đã mount
   if (!isMounted) return null;
+
+  // 👉 Hiển thị đúng 3 số liền kề
+  const start = Math.max(1, currentPage - 1);
+  const end = Math.min(totalPages, start + 2);
+  const pages: number[] = [];
+  for (let i = start; i <= end; i++) {
+    pages.push(i);
+  }
 
   return (
     <div className="flex justify-center mt-4 gap-2">
@@ -46,20 +35,17 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
         Prev
       </Button>
 
-      {getPages().map((p, idx) =>
-        p === "..." ? (
-          <span key={idx} className="px-2">...</span>
-        ) : (
-          <Button
-            key={p}
-            size="sm"
-            variant={currentPage === p ? "default" : "outline"}
-            onClick={() => onPageChange(Number(p))}
-          >
-            {p}
-          </Button>
-        )
-      )}
+      {pages.map((p) => (
+        <Button
+          key={p}
+          size="sm"
+          className={currentPage === p ? "bg-red-500 text-white" : ""}
+          variant={currentPage === p ? "default" : "outline"}
+          onClick={() => onPageChange(p)}
+        >
+          {p}
+        </Button>
+      ))}
 
       <Button
         size="sm"
