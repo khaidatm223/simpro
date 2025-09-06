@@ -12,7 +12,7 @@ export async function GET() {
     const password = "123456";
     const role = "admin";
 
-    const existing = await User.findOne({ username });
+    const existing = await (User as any).findOne({ username });
     if (!existing) {
       const hashed = await bcrypt.hash(password, 10);
       await User.create({ username, password: hashed, role });

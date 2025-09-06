@@ -296,7 +296,7 @@ export default function Home() {
       {highEndSims.length > 0 && (
         <div className="mb-10">
           <h2 className="text-2xl font-bold mb-4 text-yellow-600">
-            🌟 Sim mới về
+            🌟 Sim Thượng Lưu
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {currentHighEndSims.map((sim) => (
