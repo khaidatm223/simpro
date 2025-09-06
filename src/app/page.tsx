@@ -1,4 +1,6 @@
 "use client";
+import Pagination from "@/components/Pagination";
+import React from "react";
 
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -69,8 +71,6 @@ export default function Home() {
     setSending(false);
   };
 
-
-
   const handleHold = async () => {
     if (!selectedSim) return;
     if (!name.trim() || !phone.trim()) {
@@ -108,7 +108,6 @@ export default function Home() {
     }
   };
 
-
   // Pagination normal sims
   const [currentPage, setCurrentPage] = useState(1);
   const simsPerPage = 30;
@@ -122,13 +121,29 @@ export default function Home() {
       const res = await fetch("/api/sims?page=1&limit=19999");
       const data = await res.json();
       setSims(data.sims || []);  // ✅ lấy mảng sims
+      // 👉 Tổng số trang
+      const totalHighEndPages = Math.ceil(sims.length / highEndPerPage);
+
+      // 👉 Các sim của trang hiện tại
+      const currentHighEndSims = sims.slice(
+        (currentHighEndPage - 1) * highEndPerPage,
+        currentHighEndPage * highEndPerPage
+      );
+
     };
     fetchSims();
   }, []);
 
 
   const filtered = sims.filter((sim) => {
-    const matchKeyword = keyword ? sim.so.endsWith(keyword) : true;
+    const normalizeNumber = (str: string) =>
+      str.replace(/[.,\s]/g, ""); // bỏ ., và khoảng trắng
+
+    const simSo = normalizeNumber(sim.so);
+    const searchKey = keyword ? normalizeNumber(keyword) : "";
+
+    const matchKeyword = searchKey ? simSo.endsWith(searchKey) : true;
+
     const matchNhaMang = nhaMang ? sim.nhaMang === nhaMang : true;
     let matchLoai = true;
     if (loaiSim) {
@@ -161,6 +176,7 @@ export default function Home() {
     return matchKeyword && matchNhaMang && matchLoai && matchGia;
   });
 
+  
   // Tách riêng sim Thượng Lưu
   const highEndSims = filtered.filter(
     (sim) => removeVietnameseTones(sim.loaiSim || "") === "thuong luu"
@@ -169,19 +185,29 @@ export default function Home() {
     (sim) => removeVietnameseTones(sim.loaiSim || "") !== "thuong luu"
   );
 
-  // Lấy trang hiện tại cho High-End
-  const totalHighEndPages = Math.ceil(highEndSims.length / highEndPerPage);
+  // High-End Sims
+  const totalHighEndPages = Math.max(
+    1,
+    Math.ceil(highEndSims.length / highEndPerPage)
+  );
+
   const currentHighEndSims = highEndSims.slice(
     (currentHighEndPage - 1) * highEndPerPage,
     currentHighEndPage * highEndPerPage
   );
 
-  // Lấy trang hiện tại cho Normal Sims
-  const totalPages = Math.ceil(normalSims.length / simsPerPage);
+  // Normal Sims
+  const totalNormalPages = Math.max(
+    1,
+    Math.ceil(normalSims.length / simsPerPage)
+  );
+
   const currentSims = normalSims.slice(
     (currentPage - 1) * simsPerPage,
     currentPage * simsPerPage
   );
+
+
 
   return (
     <div className="container mx-auto p-6">
@@ -198,6 +224,8 @@ export default function Home() {
 
       {/* Bộ lọc */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        
+        
         <select
           className="border p-2 rounded"
           value={nhaMang}
@@ -221,7 +249,6 @@ export default function Home() {
           <option value="3">5–10 triệu</option>
           <option value="4">Trên 10 triệu</option>
         </select>
-
         <select
           className="border p-2 rounded"
           value={loaiSim}
@@ -242,7 +269,7 @@ export default function Home() {
           <option value="Hợp mệnh">Hợp mệnh</option>
           <option value="Taxi">Taxi</option>
           <option value="Dễ nhớ">Dễ nhớ</option>
-          <option value="Gánh đảo">Gánh đảo</option>
+          <option value="Cặp gánh đảo">Cặp gánh đảo</option>
           <option value="Tiến lên">Tiến lên</option>
           <option value="Độc lạ">Độc lạ</option>
 
@@ -261,7 +288,7 @@ export default function Home() {
             <option value="Thổ">Thổ</option>
           </select>
         )}
-
+ 
 
       </div>
 
@@ -275,26 +302,26 @@ export default function Home() {
             {currentHighEndSims.map((sim) => (
               <Card
                 key={sim.id}
-                className="relative shadow-lg hover:shadow-2xl transition rounded-2xl p-4 bg-gradient-to-br from-yellow-100 to-yellow-50 border border-yellow-300"
+                className="flex justify-between items-center p-1.5 md:p-2.5 rounded-xl border border-gray-300 shadow-sm hover:shadow-md transition bg-transparent"
               >
-                <div className="text-center mb-4">
-                  <h2 className="text-3xl md:text-4xl font-extrabold text-red-700 tracking-wider">
+                {/* Bên trái */}
+                <div className="flex flex-col">
+                  <span className="text-2xl md:text-3xl font-bold text-blue-600">
                     {sim.so}
-                  </h2>
+                  </span>
+                  <span className="text-xs md:text-sm text-gray-600 font-medium">
+                    📶 {sim.nhaMang}
+                  </span>
                 </div>
 
-                <div className="flex flex-col gap-2 text-left text-gray-800">
-                  <p className="font-semibold">📶 {sim.nhaMang}</p>
-                  <p className="font-medium">🔮 {sim.loaiSim}</p>
-                  <p className="text-sm font-extrabold text-gray-600">
-                    💰 Giá: {Number(sim.gia || 0).toLocaleString()} đ
-                  </p>
-                </div>
-
-                <div className="absolute bottom-4 right-4">
+                {/* Bên phải */}
+                <div className="flex flex-col items-end">
+                  <span className="text-base md:text-1xl font-bold text-green-600 mb-1">
+                    {Number(sim.gia || 0).toLocaleString()} đ
+                  </span>
                   <Button
                     size="sm"
-                    className="rounded-full px-4 py-2 shadow-md bg-blue-500 text-white hover:bg-blue-600"
+                    className="px-1 py-0.2 rounded-md shadow bg-blue-500 text-white hover:bg-blue-600 text-xs"
                     onClick={() => setSelectedSim(sim)}
                   >
                     Giữ số
@@ -304,98 +331,68 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Pagination High-End */}
-          <div className="flex justify-center mt-4 gap-2">
-            <Button
-              size="sm"
-              disabled={currentHighEndPage === 1}
-              onClick={() => setCurrentHighEndPage((p) => p - 1)}
-            >
-              Prev
-            </Button>
-            {Array.from({ length: totalHighEndPages }, (_, i) => (
-              <Button
-                key={i}
-                size="sm"
-                variant={currentHighEndPage === i + 1 ? "default" : "outline"}
-                onClick={() => setCurrentHighEndPage(i + 1)}
-              >
-                {i + 1}
-              </Button>
-            ))}
-            <Button
-              size="sm"
-              disabled={currentHighEndPage === totalHighEndPages}
-              onClick={() => setCurrentHighEndPage((p) => p + 1)}
-            >
-              Next
-            </Button>
-          </div>
+          {totalHighEndPages > 1 && currentHighEndSims.length > 0 && (
+            <Pagination
+              currentPage={currentHighEndPage}
+              totalPages={totalHighEndPages}
+              onPageChange={setCurrentHighEndPage}
+            />
+          )}
+
         </div>
       )}
 
       {/* Danh sách sim thường */}
-      <h2 className="text-2xl font-bold mb-4">📋 Sim Tổng Hợp</h2>
+      <h2 className="text-2xl font-bold mb-4 text-yellow-600">📋 Sim Tổng Hợp</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {currentSims.map((sim) => (
           <Card
             key={sim.id}
-            className="relative shadow-md hover:shadow-lg hover:border-blue-400 transition rounded-2xl p-4 bg-gray-70 border border-gray-300"
+            className="flex justify-between items-center p-1.5 md:p-2.5 rounded-xl border border-gray-300 shadow-sm hover:shadow-md transition bg-transparent"
           >
-            <div className="text-center mb-4">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-red-600 tracking-wider">
+            {/* Bên trái */}
+            <div className="flex flex-col">
+              <span className="text-2xl md:text-3xl font-bold text-blue-600">
                 {sim.so}
-              </h2>
+              </span>
+              <span className="text-xs md:text-sm text-gray-600 font-medium">
+                📶 {sim.nhaMang}
+              </span>
             </div>
 
-            <div className="flex flex-col gap-2 text-left text-gray-700">
-              <p className="font-semibold">📶 {sim.nhaMang}</p>
-              <p className="font-medium">🔮 {sim.loaiSim}</p>
-              <p className="text-sm font-extrabold text-gray-600">
-                💰 Giá: {Number(sim.gia || 0).toLocaleString()} đ
-              </p>
-            </div>
-
-            <div className="absolute bottom-4 right-4">
+            {/* Bên phải */}
+            <div className="flex flex-col items-end">
+              <span className="text-base md:text-1xl font-bold text-green-600 mb-1">
+                {Number(sim.gia || 0).toLocaleString()} đ
+              </span>
               <Button
                 size="sm"
-                className="rounded-full px-4 py-2 shadow-md bg-blue-500 text-white hover:bg-blue-600"
+                className="px-1 py-0.2 rounded-md shadow bg-blue-500 text-white hover:bg-blue-600 text-xs"
                 onClick={() => setSelectedSim(sim)}
               >
                 Giữ số
               </Button>
             </div>
           </Card>
-        ))}
-      </div>
 
-      {/* Pagination Normal Sims */}
-      <div className="flex justify-center mt-6 gap-2">
-        <Button
-          size="sm"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((p) => p - 1)}
-        >
-          Prev
-        </Button>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <Button
-            key={i}
-            size="sm"
-            variant={currentPage === i + 1 ? "default" : "outline"}
-            onClick={() => setCurrentPage(i + 1)}
-          >
-            {i + 1}
-          </Button>
+
         ))}
-        <Button
-          size="sm"
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage((p) => p + 1)}
-        >
-          Next
-        </Button>
       </div>
+      
+      {totalNormalPages > 1 && currentSims.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalNormalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
+
+
+
+      
+
+
+
 
       {/* Dialog Giữ số */}
       <Dialog open={!!selectedSim} onOpenChange={() => setSelectedSim(null)}>
