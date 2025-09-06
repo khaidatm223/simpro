@@ -1,6 +1,6 @@
 // src/app/api/seed-ctv-admin/route.ts
 import { NextResponse } from "next/server";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import connectToDB from "@/lib/mongodb";
 import User from "@/models/User";
 
