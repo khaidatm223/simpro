@@ -6,16 +6,23 @@ import User from "@/models/User";
 
 export async function GET() {
   try {
+    // Kết nối MongoDB
     await connectToDB();
 
-    const username = "admin";  // hoặc tên riêng cho từng CTV nếu bạn muốn
+    // Thông tin admin CTV
+    const username = "admin";  // hoặc đổi thành tên khác
     const password = "123456";
     const role = "admin";
 
-    const existing = await (User as any).findOne({ username });
+    // Kiểm tra xem admin đã tồn tại chưa
+    const existing = await User.findOne({ username });
     if (!existing) {
+      // Hash password
       const hashed = await bcrypt.hash(password, 10);
-      await User.create({ username, password: hashed, role });
+
+      // Tạo user mới bằng cách new + save
+      const user = new User({ username, password: hashed, role });
+      await user.save();
     }
 
     return NextResponse.json({ success: true, message: "CTV admin created" });
