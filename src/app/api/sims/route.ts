@@ -63,7 +63,7 @@ export async function POST(req: Request) {
 
     // Bổ sung check: nếu thiếu owner thì gán "unknown"
     const username = getUsername(req);
-
+    const currentUser = "system"; // TODO: replace bằng session user sau này
     const simsWithOwner = sims.map((sim) => ({
       ...sim,
       owner: currentUser || "unknown",
